@@ -223,12 +223,15 @@ public class FlowLayout extends ViewGroup {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int curY = mSpaceTopAndBottom;
         for(int i = 0 ; i < mLevels.size() ; i++){
+            //calculate the total width of the views in this level(including space between them).
             int curX = 0;
             int totalWidth = 0;
             for(View child : mLevels.get(i)){
                 totalWidth += (child.getMeasuredWidth() + mSpaceBetweenChildren);
             }
             totalWidth -= mSpaceBetweenChildren;
+            //use different ways to determine the start position
+            //so as to realize different ways of alignment.
             switch (mAlignment){
                 case ALIGNMENT_LEFT:
                     curX = mSpaceLeftAndRight;
@@ -240,6 +243,7 @@ public class FlowLayout extends ViewGroup {
                     curX = mWidth - mSpaceLeftAndRight - totalWidth;
                     break;
             }
+            //determine the accurate position of the views according to their layout_gravity
             for(View view : mLevels.get(i)){
                 if(view.getVisibility() != GONE){
                     LayoutParams params = (FlowLayout.LayoutParams)view.getLayoutParams();
@@ -280,6 +284,7 @@ public class FlowLayout extends ViewGroup {
     @Override
     protected void onDraw(Canvas canvas) {
         if(mHasSplitLines){
+            //draw split lines
             int curY = mSpaceTopAndBottom / 2;
             for(int i = 0 ; i < mLevelHeights.size() ; i++){
                 canvas.drawLine(0,curY,mWidth,curY,paintForSplitLines);
